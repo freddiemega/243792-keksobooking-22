@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Юрий](https://up.htmlacademy.ru/javascript/22/user/243792).
-* Наставник: `Дмитрий Рябинин`.
+* Наставник: [Дмитрий Рябинин](https://up.htmlacademy.ru/javascript/22/user/63289).
 
 ---
 
