@@ -27,7 +27,7 @@ console.log(getRandom(5, 10));
 // функция случайное число из диапазона с заданным "количеством знаков после запятой"
 const getRandomDecimalPlaces = function (minNumber, maxNumber, decimalPlaces) {
   if (minNumber <= maxNumber) {
-    num = Math.random() * (maxNumber - minNumber) + minNumber;
+    let num = Math.random() * (maxNumber - minNumber) + minNumber;
     return Number(num.toFixed(decimalPlaces));
   }
   return false;
