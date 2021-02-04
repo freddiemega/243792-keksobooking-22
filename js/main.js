@@ -24,11 +24,10 @@ getRandom(1, 10);
 
 // функция случайное число из диапазона с заданным "количеством знаков после запятой"
 const getRandomDecimalPlaces = function (minNumber, maxNumber, decimalPlaces) {
-  if (minNumber <= maxNumber) {
-    let num = Math.random() * (maxNumber - minNumber) + minNumber;
-    return Number(num.toFixed(decimalPlaces));
-  }
-  return false;
+  const min = Math.min(minNumber, maxNumber);
+  const max = Math.max(minNumber, maxNumber);
+  let num = Math.random() * (max - min) + min;
+  return Number(num.toFixed(decimalPlaces));
 }
 
-getRandomDecimalPlaces(0, 20, 3);
+document.body.innerHTML = getRandomDecimalPlaces(30, 20, 2);
