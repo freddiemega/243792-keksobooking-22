@@ -17,8 +17,11 @@ sumWay2('123', 5);
 const getRandom = function (minNumber, maxNumber) {
   if (minNumber <= maxNumber) {
     return Math.ceil(Math.random() * (maxNumber - minNumber) + minNumber);
+  } else {
+    //если аргументы перепутаны, то функция всё равно сработает - переставит аргументы местами
+    return Math.ceil(Math.random() * (minNumber - maxNumber) + maxNumber);
   }
-  return false;
+
 }
 
 getRandom(5, 10);
