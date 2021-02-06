@@ -52,7 +52,6 @@ const PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ];
 const SIMILAR_ADVERT_COUNT = 10;
-
 // функция случайное целое число из диапазона
 const getRandom = function (minNumber, maxNumber) {
   const min = Math.min(minNumber, maxNumber);
