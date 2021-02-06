@@ -72,7 +72,7 @@ const getRandomBinary = function () {
 }
 // функция возвращает случайный элемент массива
 const getRandomArrayElement = (elements) => {
-  return elements[_.random(0, elements.length - 1)];
+  return elements[Math.floor(Math.random()*elements.length)];
 };
 // функция возвращает массив с несколькими случайными значениями из исходного массива без повторов
 const getMultipleValuesArray = function (sourceArray) {
@@ -93,7 +93,7 @@ const createAdvert = () => {
 
   // создаём объект author
   let author = {
-    avatar: 'img/avatars/user0' + getRandom(1, 8) + '.png'
+    avatar: 'img/avatars/user0' + getRandom(1, 8) + '.png',
   };
     // создаём объект location
   let location = {
@@ -125,4 +125,5 @@ const createAdvert = () => {
 
 const similarAdverts = new Array(SIMILAR_ADVERT_COUNT).fill(null).map(() => createAdvert());
 
-console.log(similarAdverts);
+//console.log(similarAdverts);
+similarAdverts;
