@@ -52,36 +52,34 @@ const PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ];
 const SIMILAR_ADVERT_COUNT = 10;
+
 // функция случайное целое число из диапазона
 const getRandom = function (minNumber, maxNumber) {
-  const min = Math.min(minNumber, maxNumber);
-  const max = Math.max(minNumber, maxNumber);
-  return Math.ceil(Math.random() * (max - min) + min);
+  const min = Math.min (minNumber, maxNumber);
+  const max = Math.max (minNumber, maxNumber);
+  return Math.ceil (Math.random() * (max - min) + min);
 }
 // функция случайное число из диапазона с заданным "количеством знаков после запятой"
 const getRandomDecimalPlaces = function (minNumber, maxNumber, decimalPlaces) {
-  const min = Math.min(minNumber, maxNumber);
-  const max = Math.max(minNumber, maxNumber);
-  let num = Math.random() * (max - min) + min;
-  return Number(num.toFixed(decimalPlaces));
+  const min = Math.min (minNumber, maxNumber);
+  const max = Math.max (minNumber, maxNumber);
+  let num = Math.random () * (max - min) + min;
+  return Number (num.toFixed (decimalPlaces));
 }
 // функция возвращает 0 или 1 случайно
 const getRandomBinary = function () {
-  return Math.round(Math.random());
+  return Math.round (Math.random ());
 }
 // функция возвращает случайный элемент массива
 const getRandomArrayElement = (elements) => {
-  return elements[Math.floor(Math.random()*elements.length)];
+  return elements[Math.floor (Math.random () * elements.length)];
 };
 // функция возвращает массив с несколькими случайными значениями из исходного массива без повторов
 const getMultipleValuesArray = function (sourceArray) {
   let tempArray = [];
   //цикл работает пока целевой массив пустой - если такое произошло случайно
   while (tempArray.length === 0) {
-    tempArray = sourceArray.filter((arrayVariable) =>  {
-      //переносим значение из исходного массива или нет случайно
-      if (getRandomBinary() === 0) return arrayVariable;
-    });
+    tempArray = sourceArray.filter(() => getRandomBinary())
   }
   return tempArray;
 }
@@ -96,33 +94,33 @@ const createAdvert = () => {
   };
     // создаём объект location
   let location = {
-    x: getRandomDecimalPlaces(35.65000, 35.70000, 5),
-    y: getRandomDecimalPlaces(139.70000, 139.80000, 5),
+    x: getRandomDecimalPlaces (35.65000, 35.70000, 5),
+    y: getRandomDecimalPlaces (139.70000, 139.80000, 5),
   };
   // создаём объект offer
   let offer = {
     title: TITLES[counter],
-    address: [location.x, location.y],
-    price: getRandom(1000, 10000),
-    type: getRandomArrayElement(TYPES_REAL_ESTATE),
-    rooms: getRandom(1, 9),
-    guests: getRandom(1, 40),
-    checkin: getRandomArrayElement(CHECKIN_TIMES),
-    checkout: getRandomArrayElement(CHECKOUT_TIMES),
-    features: getMultipleValuesArray(FEATURES_REAL_ESTATE),
-    description: DESCRIPTIONS[counter],
-    photos: getMultipleValuesArray(PHOTOS),
+    address: location.x + ',' + location.y,
+    price: getRandom (1000, 10000),
+    type: getRandomArrayElement (TYPES_REAL_ESTATE),
+    rooms: getRandom (1, 9),
+    guests: getRandom (1, 40),
+    checkin: getRandomArrayElement (CHECKIN_TIMES),
+    checkout: getRandomArrayElement (CHECKOUT_TIMES),
+    features: getMultipleValuesArray (FEATURES_REAL_ESTATE),
+    description: DESCRIPTIONS [counter],
+    photos: getMultipleValuesArray (PHOTOS),
   };
   // инкремент счётчика
   counter++;
-  return [
+  return {
     author,
     offer,
     location,
-  ];
+  };
 };
 
-const similarAdverts = new Array(SIMILAR_ADVERT_COUNT).fill(null).map(() => createAdvert());
+const similarAdverts = new Array (SIMILAR_ADVERT_COUNT).fill (null).map (() => createAdvert ());
 
 //console.log(similarAdverts);
 similarAdverts;
