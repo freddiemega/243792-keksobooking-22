@@ -72,7 +72,7 @@ const createAdvert = () => {
   // создаём объект offer
   let offer = {
     title: TITLES[counter],
-    address: location.x + ',' + location.y,
+    address: location.x + ', ' + location.y,
     price: getRandom (1000, 10000),
     type: getRandomArrayElement (TYPES_REAL_ESTATE),
     rooms: getRandom (1, 9),
@@ -94,5 +94,7 @@ const createAdvert = () => {
 
 const similarAdverts = new Array (SIMILAR_ADVERT_COUNT).fill (null).map (() => createAdvert ());
 
-/*console.log(similarAdverts);*/
-similarAdverts;
+//console.log(similarAdverts);
+//similarAdverts;
+
+export {similarAdverts};
