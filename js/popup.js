@@ -1,13 +1,7 @@
-
-import {similarAdverts} from './data.js';
 // находим место вставки объявления
 const placeForAdvert = document.querySelector('#map-canvas');
 // находим шаблон
 const newItemTemplate = document.querySelector('#card').content.querySelector('.popup');
-// задаём номер объявления для примера
-const NUMBER_OF_ADVERT = 1;
-
-const currentDataAdvert = similarAdverts[NUMBER_OF_ADVERT];
 
 // функция возвращает тип жилья по русски
 const getTypeOfRealEstate = function (typeOfRealEstate) {
@@ -60,8 +54,8 @@ const getPhotos = function (arrayPhotos) {
 }
 
 /* функция создаёт объявление - принимает объект с данными,
-возвращает HTML объявления для вставки в разметку*/
-const createAdvert = function (valueDataAdvert) {
+создаёт HTML объявления и вставляет его в разметку*/
+const showAdvert = function (valueDataAdvert) {
   // клонируем объявление
   const advert = newItemTemplate.cloneNode(true);
   // аватар пользователя
@@ -79,14 +73,14 @@ const createAdvert = function (valueDataAdvert) {
   // заезд отъезд
   advert.querySelector('.popup__text--time').textContent = 'Заезд после ' + valueDataAdvert.offer.checkin + ', выезд до ' + valueDataAdvert.offer.checkout;
   // все доступные удобства в объявлении
-  advert.querySelector('.popup__features').innerHTML = getListItemsFeatures (currentDataAdvert.offer.features);
+  advert.querySelector('.popup__features').innerHTML = getListItemsFeatures (valueDataAdvert.offer.features);
   // описание объекта недвижимости
   advert.querySelector('.popup__description').textContent = valueDataAdvert.offer.description;
   // все фотографии из списка
-  advert.querySelector('.popup__photos').innerHTML = getPhotos (currentDataAdvert.offer.photos);
-
-  return advert;
+  advert.querySelector('.popup__photos').innerHTML = getPhotos (valueDataAdvert.offer.photos);
+  // размещаем объявление
+  placeForAdvert.appendChild(advert);
 }
 
-// вставка объявления
-placeForAdvert.appendChild(createAdvert (currentDataAdvert));
+// экспорт функции создания и размещения объявления
+export {showAdvert};
