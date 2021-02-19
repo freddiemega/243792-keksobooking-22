@@ -35,13 +35,13 @@ const setPriceForNight = function (selectedType) {
 }
 // «Тип жилья» — выбор опции меняет атрибуты минимального значения и плейсхолдера поля «Цена за ночь»
 // находим какой пункт селекта выбран
-let selectedType = fieldSelectType.options[fieldSelectType.selectedIndex].value;
+let selectedType = fieldSelectType.value;
 // устанавливаем соответствие полей "Цена за ночь" от "Тип жилья"
 setPriceForNight (selectedType);
 // прослушиваем событие изменения селекта
 fieldSelectType.addEventListener('change', function () {
   // находим какой пункт селекта выбран
-  selectedType = fieldSelectType.options[fieldSelectType.selectedIndex].value;
+  selectedType = fieldSelectType.value;
   // устанавливаем соответствие полей "Цена за ночь" от "Тип жилья"
   setPriceForNight (selectedType);
 });
