@@ -83,4 +83,4 @@ const showAdvert = function (valueDataAdvert) {
 }
 
 // экспорт функции создания и размещения объявления
-export {showAdvert};
+export {showAdvert, getTypeOfRealEstate, getListItemsFeatures, getPhotos};
