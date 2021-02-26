@@ -114,7 +114,7 @@ const CENTER_TOKYO = {
   lng: 139.76463,
 };
 // создаём карту
-const map = L.map('map-canvas')
+const map = window.L.map('map-canvas')
 // действие при загрузке карты
   .on('load', () => {
     // переводим страницу в активное состояние
@@ -123,7 +123,7 @@ const map = L.map('map-canvas')
   .setView(
     CENTER_TOKYO, 12);
 // добавляем на карту слой и копирайт
-L.tileLayer(
+window.L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -131,13 +131,13 @@ L.tileLayer(
 ).addTo(map);
 
 // создаём свою Главную метку
-const mainPinIcon = L.icon({
+const mainPinIcon = window.L.icon({
   iconUrl: 'img/main-pin.svg',
   iconSize: [100, 100],
   iconAnchor: [50, 100],
 });
 // добавляем на карту метку
-const marker = L.marker(
+const marker = window.L.marker(
   CENTER_TOKYO,
   {
     draggable: true,
@@ -178,13 +178,13 @@ const createCustomPopup = (point) => {
 // функция создания метки по координатам
 const createMarkerOnMap = function (point) {
   // создаём метку
-  const pinIcon = L.icon({
+  const pinIcon = window.L.icon({
     iconUrl: 'img/pin.svg',
     iconSize: [50, 50],
     iconAnchor: [25, 50],
   });
   // добавляем на карту метку
-  const marker = L.marker(
+  const marker = window.L.marker(
     {
       lat: point.location.x,
       lng: point.location.y,
