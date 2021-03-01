@@ -1,7 +1,7 @@
 // находим место вставки объявления
-const placeForAdvert = document.querySelector('#map-canvas');
+//const placeForAdvert = document.querySelector('#map-canvas');
 // находим шаблон
-const newItemTemplate = document.querySelector('#card').content.querySelector('.popup');
+//const newItemTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 // функция возвращает тип жилья по русски
 const getTypeOfRealEstate = function (typeOfRealEstate) {
@@ -53,11 +53,10 @@ const getPhotos = function (arrayPhotos) {
   return arrayPhotosHTML.join('\n');
 }
 
-/* функция создаёт объявление - принимает объект с данными,
-создаёт HTML объявления и вставляет его в разметку*/
-const showAdvert = function (valueDataAdvert) {
+// функция возвращает объявление, принимает объект с данными и шаблон, возвращает HTML объявления
+const createAdvertFromTemplate = function (valueDataAdvert, popupTemplate) {
   // клонируем объявление
-  const advert = newItemTemplate.cloneNode(true);
+  const advert = popupTemplate.cloneNode(true);
   // аватар пользователя
   advert.querySelector('.popup__avatar').src = valueDataAdvert.author.avatar;
   // заголовок объявления
@@ -78,9 +77,9 @@ const showAdvert = function (valueDataAdvert) {
   advert.querySelector('.popup__description').textContent = valueDataAdvert.offer.description;
   // все фотографии из списка
   advert.querySelector('.popup__photos').innerHTML = getPhotos (valueDataAdvert.offer.photos);
-  // размещаем объявление
-  placeForAdvert.appendChild(advert);
+
+  return advert;
 }
 
 // экспорт функции создания и размещения объявления
-export {showAdvert, getTypeOfRealEstate, getListItemsFeatures, getPhotos};
+export {createAdvertFromTemplate, getTypeOfRealEstate, getListItemsFeatures, getPhotos};
