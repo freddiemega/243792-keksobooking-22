@@ -92,5 +92,3 @@ map.on('load', () => {
 })
   .setView(
     CENTER_TOKYO, 12);
-
-setPageActive ();
