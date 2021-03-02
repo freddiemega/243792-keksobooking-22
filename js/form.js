@@ -59,3 +59,38 @@ fieldTimeIn.addEventListener('change', function () {
 fieldTimeOut.addEventListener('change', function () {
   fieldTimeIn.value = fieldTimeOut.value;
 });
+
+
+// функция приводит форму  в неактивное состояние
+// принимает форму и класс для выключения тега <form> согласно ТЗ
+const blockForm = function (form, formClass) {
+  // добавляем форме класс formClass
+  form.classList.add(formClass);
+  // находим все дочерние элементы формы
+  let childElements = form.children;
+  // блокируем все дочерние элементы в форме с помощью аттрибута disabled
+  for (let i = 0; i < childElements.length; i++) {
+    childElements[i].setAttribute('disabled', 'disabled');
+  }
+}
+
+// функция приводит форму в активное состояние
+const unBlockForm = function (form, formClass) {
+  // удаляем в форме класс formClass
+  form.classList.remove(formClass);
+  // находим все дочерние элементы формы
+  let childElements = form.children;
+  // разблокируем все дочерние элементы в форме с помощью аттрибута disabled
+  for (let i = 0; i < childElements.length; i++) {
+    childElements[i].removeAttribute('disabled');
+  }
+}
+
+// метод задаёт адресс в поле адреса
+// находим поле адреса
+const fieldAddress = document.querySelector('#address');
+const setAddressField = function (latitude, longitude) {
+  fieldAddress.value = latitude + ', ' + longitude;
+}
+
+export {blockForm, unBlockForm, setAddressField};
