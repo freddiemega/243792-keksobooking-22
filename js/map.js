@@ -1,6 +1,6 @@
 import {similarAdverts} from './data.js';
 import {createAdvertFromTemplate} from './popup.js';
-import {blockForm, unBlockForm, setAddressField} from './form.js';
+import {setAddressField, activateForms, deactivateForms} from './form.js';
 
 // находим шаблон балуна
 const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
@@ -13,21 +13,13 @@ const CENTER_TOKYO = {
 // создаём карту
 const map = window.L.map('map-canvas');
 
-// находим форму создания объявления
-const adForm = document.querySelector('.ad-form');
-// находим форму фильтра карты
-const mapFiltersForm = document.querySelector('.map__filters');
-
-// неактивное состояние
-const setPageInactive = function () {
-  blockForm (adForm, 'ad-form--disabled');
-  blockForm (mapFiltersForm, 'map__filters--disabled');
-}
+// неактивное состояние - активируем формы
+deactivateForms ();
 
 // активное состояние
 const setPageActive = function () {
-  unBlockForm (adForm, 'ad-form--disabled');
-  unBlockForm (mapFiltersForm, 'map__filters--disabled');
+  // активируем формы
+  activateForms ();
 
   // добавляем на карту слой и копирайт
   window.L.tileLayer(
@@ -101,5 +93,4 @@ map.on('load', () => {
   .setView(
     CENTER_TOKYO, 12);
 
-setPageInactive();
 setPageActive ();

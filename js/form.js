@@ -61,6 +61,22 @@ fieldTimeOut.addEventListener('change', function () {
 });
 
 
+
+// находим форму создания объявления
+const adForm = document.querySelector('.ad-form');
+// находим форму фильтра карты
+const mapFiltersForm = document.querySelector('.map__filters');
+
+const activateForms = function () {
+  unBlockForm (adForm, 'ad-form--disabled');
+  unBlockForm (mapFiltersForm, 'map__filters--disabled');
+}
+
+const deactivateForms = function () {
+  blockForm (adForm, 'ad-form--disabled');
+  blockForm (mapFiltersForm, 'map__filters--disabled');
+}
+
 // функция приводит форму  в неактивное состояние
 // принимает форму и класс для выключения тега <form> согласно ТЗ
 const blockForm = function (form, formClass) {
@@ -93,4 +109,4 @@ const setAddressField = function (latitude, longitude) {
   fieldAddress.value = latitude + ', ' + longitude;
 }
 
-export {blockForm, unBlockForm, setAddressField};
+export {setAddressField, activateForms, deactivateForms};
