@@ -1,10 +1,9 @@
-import {showAdvert} from './popup.js';
-import {similarAdverts} from './data.js';
-
+//import {getTypeOfRealEstate, getListItemsFeatures, getPhotos} from './popup.js';
+/*
 // задаём номер объявления для примера
 const NUMBER_OF_ADVERT = 1;
 const currentDataAdvert = similarAdverts[NUMBER_OF_ADVERT];
-showAdvert(currentDataAdvert);
+*/
 
 // находим форму
 const advertForm = document.querySelector('.ad-form');
@@ -35,13 +34,13 @@ const setPriceForNight = function (selectedType) {
 }
 // «Тип жилья» — выбор опции меняет атрибуты минимального значения и плейсхолдера поля «Цена за ночь»
 // находим какой пункт селекта выбран
-let selectedType = fieldSelectType.options[fieldSelectType.selectedIndex].value;
+let selectedType = fieldSelectType.value;
 // устанавливаем соответствие полей "Цена за ночь" от "Тип жилья"
 setPriceForNight (selectedType);
 // прослушиваем событие изменения селекта
 fieldSelectType.addEventListener('change', function () {
   // находим какой пункт селекта выбран
-  selectedType = fieldSelectType.options[fieldSelectType.selectedIndex].value;
+  selectedType = fieldSelectType.value;
   // устанавливаем соответствие полей "Цена за ночь" от "Тип жилья"
   setPriceForNight (selectedType);
 });
@@ -60,3 +59,54 @@ fieldTimeIn.addEventListener('change', function () {
 fieldTimeOut.addEventListener('change', function () {
   fieldTimeIn.value = fieldTimeOut.value;
 });
+
+
+
+// находим форму создания объявления
+const adForm = document.querySelector('.ad-form');
+// находим форму фильтра карты
+const mapFiltersForm = document.querySelector('.map__filters');
+
+const activateForms = function () {
+  unBlockForm (adForm, 'ad-form--disabled');
+  unBlockForm (mapFiltersForm, 'map__filters--disabled');
+}
+
+const deactivateForms = function () {
+  blockForm (adForm, 'ad-form--disabled');
+  blockForm (mapFiltersForm, 'map__filters--disabled');
+}
+
+// функция приводит форму  в неактивное состояние
+// принимает форму и класс для выключения тега <form> согласно ТЗ
+const blockForm = function (form, formClass) {
+  // добавляем форме класс formClass
+  form.classList.add(formClass);
+  // находим все дочерние элементы формы
+  let childElements = form.children;
+  // блокируем все дочерние элементы в форме с помощью аттрибута disabled
+  for (let i = 0; i < childElements.length; i++) {
+    childElements[i].setAttribute('disabled', 'disabled');
+  }
+}
+
+// функция приводит форму в активное состояние
+const unBlockForm = function (form, formClass) {
+  // удаляем в форме класс formClass
+  form.classList.remove(formClass);
+  // находим все дочерние элементы формы
+  let childElements = form.children;
+  // разблокируем все дочерние элементы в форме с помощью аттрибута disabled
+  for (let i = 0; i < childElements.length; i++) {
+    childElements[i].removeAttribute('disabled');
+  }
+}
+
+// метод задаёт адресс в поле адреса
+// находим поле адреса
+const fieldAddress = document.querySelector('#address');
+const setAddressField = function (latitude, longitude) {
+  fieldAddress.value = latitude + ', ' + longitude;
+}
+
+export {setAddressField, activateForms, deactivateForms};
