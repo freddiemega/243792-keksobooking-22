@@ -116,6 +116,44 @@ selectRooms.addEventListener('change', function () {
 });
 
 
+// валидация текстового поля title
+const MIN_NAME_LENGTH = 30;
+const MAX_NAME_LENGTH = 100;
+
+const titleInput = document.querySelector('#title');
+
+titleInput.addEventListener('input', () => {
+  const valueLength = titleInput.value.length;
+
+  if (valueLength < MIN_NAME_LENGTH) {
+    titleInput.setCustomValidity('Ещё ' + (MIN_NAME_LENGTH - valueLength) +' симв.');
+  } else if (valueLength > MAX_NAME_LENGTH) {
+    titleInput.setCustomValidity('Удалите лишние ' + (valueLength - MAX_NAME_LENGTH) +' симв.');
+  } else {
+    titleInput.setCustomValidity('');
+  }
+
+  titleInput.reportValidity();
+});
+
+
+// валидация текстового поля price
+const MAX_PPRICE_VALUE = 1000000;
+const priceInput = document.querySelector('#price');
+
+priceInput.addEventListener('input', () => {
+  const valuePrice = priceInput.value;
+
+  if (valuePrice > MAX_PPRICE_VALUE) {
+    priceInput.setCustomValidity('Максимальная цена ' + MAX_PPRICE_VALUE +' руб.');
+  } else {
+    priceInput.setCustomValidity('');
+  }
+
+  priceInput.reportValidity();
+});
+
+
 // находим форму создания объявления
 const adForm = document.querySelector('.ad-form');
 // находим форму фильтра карты
