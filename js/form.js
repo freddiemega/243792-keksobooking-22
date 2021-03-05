@@ -45,7 +45,6 @@ fieldSelectType.addEventListener('change', function () {
   setPriceForNight (selectedType);
 });
 
-
 ////// «Время заезда», «Время выезда» — выбор опции одного поля автоматически изменят значение другого
 // находим селектор "Время заезда"
 const fieldTimeIn = advertForm.querySelector('#timein');
@@ -60,6 +59,99 @@ fieldTimeOut.addEventListener('change', function () {
   fieldTimeIn.value = fieldTimeOut.value;
 });
 
+//------------«Количество комнат» синхронизировано с полем «Количество мест»
+// объект для селекта "Количество мест"
+const roomsOptionsData = [
+  {
+    values: [1],
+    guests: ['для 1 гостя'],
+  },
+  {
+    values: [2, 1],
+    guests: ['для 2 гостей', 'для 1 гостя'],
+  },
+  {
+    values: [3, 2, 1],
+    guests: ['для 3 гостей', 'для 2 гостей', 'для 1 гостя'],
+  },
+  {
+    values: [0],
+    guests: ['не для гостей'],
+  },
+];
+// находим селект "Количество комнат"
+const selectRooms = advertForm.querySelector('#room_number');
+// находим селект "Количество мест"
+const selectCapacity = advertForm.querySelector('#capacity');
+// функция создаёт теги <option> в <select id="capacity" name="capacity">
+// в зависимости от "количества комнат", данные из массива объектов roomsOptionsData
+const setCapacityForGuests = function (rooms) {
+  if (rooms == 100) {
+    rooms = 4;
+  }
+  // удаляем все дочерние элементы селекта
+  selectCapacity.innerHTML = '';
+  // цикл перебора данных нужного объекта
+  for (let i = 0; i < roomsOptionsData[rooms-1].values.length; i++) {
+    let optionItem = document.createElement('option');
+    optionItem.setAttribute ('value', roomsOptionsData[rooms-1].values[i]);
+    // устанавливаем атрибут selected для первого option
+    if (i == 0) {
+      optionItem.setAttribute('selected', 'selected');
+    }
+    optionItem.textContent  = roomsOptionsData[rooms-1].guests[i];
+    selectCapacity.appendChild (optionItem);
+  }
+}
+// находим какой пункт селекта "Количество комнат" выбран
+let selectedRoomsNumber = selectRooms.value;
+// устанавливаем соответствие полю "Количество мест"
+setCapacityForGuests (selectedRoomsNumber);
+// прослушиваем событие изменения селекта
+selectRooms.addEventListener('change', function () {
+  // находим какой пункт селекта выбран
+  selectedRoomsNumber = selectRooms.value;
+  // устанавливаем соответствие полей
+  setCapacityForGuests (selectedRoomsNumber);
+});
+
+
+// валидация текстового поля title
+const MIN_NAME_LENGTH = 30;
+const MAX_NAME_LENGTH = 100;
+
+const titleInput = document.querySelector('#title');
+
+titleInput.addEventListener('input', () => {
+  const valueLength = titleInput.value.length;
+
+  if (valueLength < MIN_NAME_LENGTH) {
+    titleInput.setCustomValidity('Ещё ' + (MIN_NAME_LENGTH - valueLength) +' симв.');
+  } else if (valueLength > MAX_NAME_LENGTH) {
+    titleInput.setCustomValidity('Удалите лишние ' + (valueLength - MAX_NAME_LENGTH) +' симв.');
+  } else {
+    titleInput.setCustomValidity('');
+  }
+
+  titleInput.reportValidity();
+});
+
+
+// валидация текстового поля price
+const MAX_PPRICE_VALUE = 1000000;
+const priceInput = document.querySelector('#price');
+
+priceInput.addEventListener('input', () => {
+  const valuePrice = priceInput.value;
+
+  if (valuePrice > MAX_PPRICE_VALUE) {
+    priceInput.setCustomValidity('Максимальная цена ' + MAX_PPRICE_VALUE +' руб.');
+  } else {
+    priceInput.setCustomValidity('');
+  }
+
+  priceInput.reportValidity();
+});
 
 
 // находим форму создания объявления
