@@ -1,4 +1,5 @@
 import {showAlert} from './util.js';
+import {resetFormAndMainPoint} from './form.js';
 
 const getData = (onSuccess) => {
   fetch('https://22.javascript.pages.academy/keksobooking/data')
@@ -11,9 +12,12 @@ const getData = (onSuccess) => {
     })
 };
 
+// находим форму
+const advertForm = document.querySelector('.ad-form');
+
 const sendData = (onSuccess, onFail, body) => {
   fetch(
-    'https://22.javascript.pages.academy/keksobooking1',
+    'https://22.javascript.pages.academy/keksobooking',
     {
       method: 'POST',
       body,

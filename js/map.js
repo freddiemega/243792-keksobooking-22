@@ -91,4 +91,8 @@ map.on('load', () => {
   .setView(
     CENTER_TOKYO, 10);
 
-export {createMarkerOnMap};
+const setMainPointToBegin = function () {
+  console.log('URA');
+};
+
+export {createMarkerOnMap, setMainPointToBegin};
