@@ -4,6 +4,8 @@
 const NUMBER_OF_ADVERT = 1;
 const currentDataAdvert = similarAdverts[NUMBER_OF_ADVERT];
 */
+import {showAlert} from './util.js';
+import {sendData} from './api.js';
 
 // находим форму
 const advertForm = document.querySelector('.ad-form');
@@ -201,4 +203,17 @@ const setAddressField = function (latitude, longitude) {
   fieldAddress.value = latitude + ', ' + longitude;
 }
 
-export {setAddressField, activateForms, deactivateForms};
+// обработчик отправки формы
+const addAdvertFormSubmit = (onSuccess) => {
+  advertForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => onSuccess(),
+      () => showAlert('Не удалось отправить форму. Попробуйте ещё раз'),
+      new FormData(evt.target),
+    );
+  });
+};
+
+export {setAddressField, activateForms, deactivateForms, addAdvertFormSubmit};

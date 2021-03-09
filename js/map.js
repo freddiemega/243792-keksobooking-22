@@ -1,4 +1,5 @@
 import {similarAdverts} from './data.js';
+//import {advertsFromServer} from './api.js';
 import {createAdvertFromTemplate} from './popup.js';
 import {setAddressField, activateForms, deactivateForms} from './form.js';
 
@@ -18,6 +19,7 @@ deactivateForms ();
 
 // активное состояние
 const setPageActive = function () {
+
   // активируем формы
   activateForms ();
 
@@ -51,10 +53,6 @@ const setPageActive = function () {
   marker.on('drag', function () {
     setAddressField (marker.getLatLng().lat.toFixed(5), marker.getLatLng().lng.toFixed(5));
   });
-  // цикл перебора коллекции объявлений - добавляем на карту метки объявлений
-  for (let i = similarAdverts.length - 1; i >= 0; i--) {
-    createMarkerOnMap (similarAdverts[i]);
-  }
 }
 
 // функция создания метки по координатам
@@ -68,8 +66,8 @@ const createMarkerOnMap = function (point) {
   // добавляем на карту метку
   const marker = window.L.marker(
     {
-      lat: point.location.x,
-      lng: point.location.y,
+      lat: point.location.lat,
+      lng: point.location.lng,
     },
     {
       draggable: false,
@@ -91,4 +89,6 @@ map.on('load', () => {
   setPageActive();
 })
   .setView(
-    CENTER_TOKYO, 12);
+    CENTER_TOKYO, 10);
+
+export {createMarkerOnMap};
