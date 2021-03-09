@@ -1,4 +1,4 @@
-import {similarAdverts} from './data.js';
+//import {similarAdverts} from './data.js';
 //import {advertsFromServer} from './api.js';
 import {createAdvertFromTemplate} from './popup.js';
 import {setAddressField, activateForms, deactivateForms} from './form.js';
