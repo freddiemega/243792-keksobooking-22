@@ -13,10 +13,7 @@ const getData = (onSuccess) => {
     })
 };
 
-// находим форму
-//const advertForm = document.querySelector('.ad-form');
-
-const sendData = (onSuccess, onFail, body, resetFormAndMainPoint) => {
+const sendData = (onSuccess, body) => {
   fetch(
     'https://22.javascript.pages.academy/keksobooking',
     {
@@ -27,18 +24,13 @@ const sendData = (onSuccess, onFail, body, resetFormAndMainPoint) => {
     .then((response) => {
       if (response.ok) {
         onSuccess();
+        resetFormAndMainPoint();
       } else {
-        //onFail('Не удалось отправить форму. Попробуйте ещё раз1');
         showErrorMessage();
       }
     })
-    .then(() => {
-      resetFormAndMainPoint();
-    })
     .catch(() => {
-      //onFail('Не удалось отправить форму. Попробуйте ещё раз2');
       showErrorMessage();
-      //console.log('CATCH');
     });
 };
 

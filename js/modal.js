@@ -1,9 +1,5 @@
-// находим элемент для закрытия
-//const successModal = document.querySelector('.success');
-
 // функция показывает сообщение об успешной отправке формы подачи объявления
 const showSuccessMessage = () => {
-  //console.log('Ваше объявление успешно размещено!');
   // находим шаблон сообщения
   const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
   // находим <main>
@@ -37,7 +33,6 @@ const isEscEvent = (evt) => {
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
-
     closeUserModal();
   }
 };
@@ -70,7 +65,6 @@ const closeUserModal = () => {
 const onPopupEscKeydownError = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
-
     closeUserModalError();
   }
 };

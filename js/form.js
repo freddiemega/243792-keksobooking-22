@@ -1,11 +1,3 @@
-//import {getTypeOfRealEstate, getListItemsFeatures, getPhotos} from './popup.js';
-/*
-// задаём номер объявления для примера
-const NUMBER_OF_ADVERT = 1;
-const currentDataAdvert = similarAdverts[NUMBER_OF_ADVERT];
-*/
-//import {showAlert} from './util.js';
-import {showErrorMessage} from './modal.js';
 import {sendData} from './api.js';
 import {setMainPointToBegin} from './map.js';
 
@@ -159,12 +151,7 @@ priceInput.addEventListener('input', () => {
   priceInput.reportValidity();
 });
 
-/*
-// находим форму создания объявления
-const adForm = document.querySelector('.ad-form');
-// находим форму фильтра карты
-const filtersForm = document.querySelector('.map__filters');
-*/
+
 const activateForms = function () {
   unBlockForm (advertForm, 'ad-form--disabled');
   unBlockForm (filtersForm, 'map__filters--disabled');
@@ -214,19 +201,23 @@ const addAdvertFormSubmit = (onSuccess) => {
 
     sendData(
       () => onSuccess(),
-      //() => showAlert('Не удалось отправить форму. Попробуйте ещё раз3'),
-      () => showErrorMessage(),
       new FormData(evt.target),
-      () => resetFormAndMainPoint(),
     );
   });
 };
+
+// обработчик кнопки Сброс
+const resetButton = document.querySelector('.ad-form__reset');
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetFormAndMainPoint();
+});
 
 // сброс обоих форм и установка поля адреса в центр
 const resetFormAndMainPoint = function () {
   advertForm.reset();
   filtersForm.reset();
-  //setMainPointToBegin();
+  setMainPointToBegin();
 }
 
 export {setAddressField, activateForms, deactivateForms, addAdvertFormSubmit, resetFormAndMainPoint};

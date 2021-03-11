@@ -1,5 +1,3 @@
-//import {similarAdverts} from './data.js';
-//import {advertsFromServer} from './api.js';
 import {createAdvertFromTemplate} from './popup.js';
 import {setAddressField, activateForms, deactivateForms} from './form.js';
 
@@ -47,24 +45,7 @@ const setPageActive = function () {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     },
   ).addTo(map);
-  /*
-  // создаём свою Главную метку
-  const mainPinIcon = window.L.icon({
-    iconUrl: 'img/main-pin.svg',
-    iconSize: [100, 100],
-    iconAnchor: [50, 100],
-  });
 
-  // добавляем на карту метку
-  const marker = window.L.marker(
-    CENTER_TOKYO,
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  );
-  marker.addTo(map);
-  */
   // задаём начальные координаты адреса центра Токио
   setAddressField (mainMarker.getLatLng().lat.toFixed(5), mainMarker.getLatLng().lng.toFixed(5));
   // выбор адреса путём перемещения главной метки и запись значений в поле адреса
@@ -111,8 +92,12 @@ map.on('load', () => {
 
 // функция устанавливает Главную метку обратно в центр Токио
 const setMainPointToBegin = function () {
-  console.log(mainMarker);
-  //window.L.mainMarker(CENTER_TOKYO);
+  // перемещаем главную метку обратно в центр Токио
+  mainMarker.setLatLng(CENTER_TOKYO);
+  // задаём координаты главной метки в поле адоес формы
+  setAddressField (mainMarker.getLatLng().lat.toFixed(5), mainMarker.getLatLng().lng.toFixed(5));
+  // задаём карте центр и зум
+  map.setView(CENTER_TOKYO, 10);
 };
 
 export {createMarkerOnMap, setMainPointToBegin};
