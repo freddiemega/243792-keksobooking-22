@@ -3,11 +3,12 @@ import './data.js';
 import './popup.js';
 import './map.js';
 import './form.js';
-
+import './modal.js';
 
 import {createMarkerOnMap} from './map.js';
 import {addAdvertFormSubmit} from './form.js';
 import {getData} from './api.js';
+import {showSuccessMessage} from './modal.js';
 
 getData((advertsFromServer) => {
   //console.log(advertsFromServer);
@@ -17,4 +18,4 @@ getData((advertsFromServer) => {
   }
 });
 
-addAdvertFormSubmit();
+addAdvertFormSubmit(showSuccessMessage);

@@ -1,4 +1,5 @@
 import {showAlert} from './util.js';
+import {showErrorMessage} from './modal.js';
 import {resetFormAndMainPoint} from './form.js';
 
 const getData = (onSuccess) => {
@@ -13,9 +14,9 @@ const getData = (onSuccess) => {
 };
 
 // находим форму
-const advertForm = document.querySelector('.ad-form');
+//const advertForm = document.querySelector('.ad-form');
 
-const sendData = (onSuccess, onFail, body) => {
+const sendData = (onSuccess, onFail, body, resetFormAndMainPoint) => {
   fetch(
     'https://22.javascript.pages.academy/keksobooking',
     {
@@ -27,11 +28,17 @@ const sendData = (onSuccess, onFail, body) => {
       if (response.ok) {
         onSuccess();
       } else {
-        onFail('Не удалось отправить форму. Попробуйте ещё раз');
+        //onFail('Не удалось отправить форму. Попробуйте ещё раз1');
+        showErrorMessage();
       }
     })
+    .then(() => {
+      resetFormAndMainPoint();
+    })
     .catch(() => {
-      onFail('Не удалось отправить форму. Попробуйте ещё раз');
+      //onFail('Не удалось отправить форму. Попробуйте ещё раз2');
+      showErrorMessage();
+      //console.log('CATCH');
     });
 };
 

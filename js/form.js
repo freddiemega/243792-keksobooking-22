@@ -4,7 +4,8 @@
 const NUMBER_OF_ADVERT = 1;
 const currentDataAdvert = similarAdverts[NUMBER_OF_ADVERT];
 */
-import {showAlert} from './util.js';
+//import {showAlert} from './util.js';
+import {showErrorMessage} from './modal.js';
 import {sendData} from './api.js';
 import {setMainPointToBegin} from './map.js';
 
@@ -213,8 +214,10 @@ const addAdvertFormSubmit = (onSuccess) => {
 
     sendData(
       () => onSuccess(),
-      () => showAlert('Не удалось отправить форму. Попробуйте ещё раз'),
+      //() => showAlert('Не удалось отправить форму. Попробуйте ещё раз3'),
+      () => showErrorMessage(),
       new FormData(evt.target),
+      () => resetFormAndMainPoint(),
     );
   });
 };
@@ -223,7 +226,7 @@ const addAdvertFormSubmit = (onSuccess) => {
 const resetFormAndMainPoint = function () {
   advertForm.reset();
   filtersForm.reset();
-  setMainPointToBegin();
+  //setMainPointToBegin();
 }
 
 export {setAddressField, activateForms, deactivateForms, addAdvertFormSubmit, resetFormAndMainPoint};
