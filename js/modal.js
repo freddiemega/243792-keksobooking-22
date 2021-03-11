@@ -98,7 +98,7 @@ const closeUserModalError = () => {
   // убираем обработчик нажатия клавиши
   document.removeEventListener('keydown', onPopupEscKeydownError);
   // убираем обработчик клика мышью
-  successModal.removeEventListener('click', onPopupClickError);
+  errorModal.removeEventListener('click', onPopupClickError);
 };
 
 export {showSuccessMessage, showErrorMessage};
