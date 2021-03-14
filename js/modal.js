@@ -1,29 +1,36 @@
+// находим шаблон сообщения об отправке формы
+const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+// находим <main> - место вставки модального окна
+const placeMain = document.querySelector('main');
+// находим шаблон сообщения об ошибке
+const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+
 // функция показывает сообщение об успешной отправке формы подачи объявления
 const showSuccessMessage = () => {
-  // находим шаблон сообщения
-  const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
-  // находим <main>
-  const placeMain = document.querySelector('main');
   // клонируем сообщение
   const successMessage = successMessageTemplate.cloneNode(true);
   // размещаем сообщение в <main> в самом начале
   placeMain.insertBefore(successMessage, placeMain.firstChild);
-  // добавляем элементу обработчик событий
-  addListenersToSuccessMessage();
+  // добавляем обработчик нажатия клавиши
+  document.addEventListener('keydown', onPopupEscKeydown);
+  // добавляем обработчик клика мышью
+  successMessage.addEventListener('click', onPopupClick);
 }
 
 // функция показывает сообщение об ошибке
 const showErrorMessage = () => {
-  // находим шаблон сообщения
-  const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
-  // находим <main>
-  const placeMain = document.querySelector('main');
   // клонируем сообщение
   const errorMessage = errorMessageTemplate.cloneNode(true);
   // размещаем сообщение в <main> в самом начале
   placeMain.insertBefore(errorMessage, placeMain.firstChild);
-  // добавляем элементу обработчик событий
-  addListenersToErrorMessage();
+  // находим кнопку
+  const errorModalButton = errorMessage.querySelector('.error__button');
+  // добавляем обработчик нажатия клавиши
+  document.addEventListener('keydown', onPopupEscKeydownError);
+  // добавляем обработчик клика мышью
+  errorMessage.addEventListener('click', onPopupClickError);
+  // добавляем обработчик на кнопку в окне
+  errorModalButton.addEventListener('click', onPopupClickError);
 }
 
 const isEscEvent = (evt) => {
@@ -41,14 +48,7 @@ const onPopupClick = (evt) => {
   evt.preventDefault();
   closeUserModal();
 };
-// функция добавляет обработчики событий
-const addListenersToSuccessMessage = () => {
-  const successModal = document.querySelector('.success');
-  // добавляем обработчик нажатия клавиши
-  document.addEventListener('keydown', onPopupEscKeydown);
-  // добавляем обработчик клика мышью
-  successModal.addEventListener('click', onPopupClick);
-};
+
 // функция "Закрыть модальное окно" убирает обработчики событий и удаляет модальное окно из DOM
 const closeUserModal = () => {
   const successModal = document.querySelector('.success');
@@ -73,17 +73,7 @@ const onPopupClickError = (evt) => {
   evt.preventDefault();
   closeUserModalError();
 };
-// функция добавляет обработчики событий на окно ошибки
-const addListenersToErrorMessage = () => {
-  const errorModal = document.querySelector('.error');
-  const errorModalButton = document.querySelector('.error__button');
-  // добавляем обработчик нажатия клавиши
-  document.addEventListener('keydown', onPopupEscKeydownError);
-  // добавляем обработчик клика мышью
-  errorModal.addEventListener('click', onPopupClickError);
-  // добавляем обработчик на кнопку в окне
-  errorModalButton.addEventListener('click', onPopupClickError);
-};
+
 // функция "Закрыть модальное окно" убирает обработчики событий и удаляет модальное окно ошибки из DOM
 const closeUserModalError = () => {
   const errorModal = document.querySelector('.error');

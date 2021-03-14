@@ -1,20 +1,5 @@
 import './util.js';
-//import './data.js';
 import './popup.js';
 import './map.js';
 import './form.js';
 import './modal.js';
-
-import {createMarkerOnMap} from './map.js';
-import {addAdvertFormSubmit} from './form.js';
-import {getData} from './api.js';
-import {showSuccessMessage} from './modal.js';
-
-getData((advertsFromServer) => {
-  // перебираем массив объектов полученных с сервера
-  for (let i = advertsFromServer.length - 1; i >= 0; i--) {
-    createMarkerOnMap(advertsFromServer[i]);
-  }
-});
-
-addAdvertFormSubmit(showSuccessMessage);

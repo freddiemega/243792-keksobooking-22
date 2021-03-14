@@ -1,5 +1,7 @@
 import {createAdvertFromTemplate} from './popup.js';
 import {setAddressField, activateForms, deactivateForms} from './form.js';
+import {getData} from './api.js';
+import {showAlert} from './util.js';
 
 // находим шаблон балуна
 const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
@@ -14,7 +16,6 @@ const map = window.L.map('map-canvas');
 
 // неактивное состояние - блокируем формы
 deactivateForms ();
-
 
 // создаём свою Главную метку
 const mainPinIcon = window.L.icon({
@@ -37,6 +38,17 @@ const setPageActive = function () {
 
   // активируем формы
   activateForms ();
+
+  // обращаемся к серверу и получаем объекты
+  getData (
+    (advertsFromServer) => {
+      // перебираем массив объектов полученных с сервера
+      for (let i = advertsFromServer.length - 1; i >= 0; i--) {
+        createMarkerOnMap(advertsFromServer[i]);
+      }
+    },
+    () => showAlert('Не удалось получить данные от сервера. Попробуйте ещё раз'),
+  );
 
   // добавляем на карту слой и копирайт
   window.L.tileLayer(

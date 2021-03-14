@@ -1,19 +1,19 @@
-import {showAlert} from './util.js';
-import {showErrorMessage} from './modal.js';
-import {resetFormAndMainPoint} from './form.js';
-
-const getData = (onSuccess) => {
+const getData = (onSuccess, onFail) => {
   fetch('https://22.javascript.pages.academy/keksobooking/data')
-    .then((response) => response.json())
-    .then((advertsFromServer) => {
-      onSuccess(advertsFromServer)
-    })
+    .then(
+      (response) => {
+        if (!response.ok) {
+          onFail();
+        }
+        response.json().then((data) => onSuccess(data));
+      },
+    )
     .catch(() => {
-      showAlert('Не удалось получить данные от сервера. Попробуйте ещё раз')
+      onFail();
     })
 };
 
-const sendData = (onSuccess, body) => {
+const sendData = (onSuccess, onFail, body) => {
   fetch(
     'https://22.javascript.pages.academy/keksobooking',
     {
@@ -24,13 +24,12 @@ const sendData = (onSuccess, body) => {
     .then((response) => {
       if (response.ok) {
         onSuccess();
-        resetFormAndMainPoint();
       } else {
-        showErrorMessage();
+        onFail();
       }
     })
     .catch(() => {
-      showErrorMessage();
+      onFail();
     });
 };
 

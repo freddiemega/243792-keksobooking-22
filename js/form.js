@@ -1,5 +1,6 @@
 import {sendData} from './api.js';
 import {setMainPointToBegin} from './map.js';
+import {showSuccessMessage, showErrorMessage} from './modal.js';
 
 // находим форму
 const advertForm = document.querySelector('.ad-form');
@@ -200,11 +201,14 @@ const addAdvertFormSubmit = (onSuccess) => {
     evt.preventDefault();
 
     sendData(
-      () => onSuccess(),
+      () => onSuccess(resetFormAndMainPoint()),
+      () => showErrorMessage(),
       new FormData(evt.target),
     );
   });
 };
+
+addAdvertFormSubmit(showSuccessMessage);
 
 // обработчик кнопки Сброс
 const resetButton = document.querySelector('.ad-form__reset');
