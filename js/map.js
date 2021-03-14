@@ -1,6 +1,7 @@
-import {similarAdverts} from './data.js';
 import {createAdvertFromTemplate} from './popup.js';
 import {setAddressField, activateForms, deactivateForms} from './form.js';
+import {getData} from './api.js';
+import {showAlert} from './util.js';
 
 // находим шаблон балуна
 const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
@@ -16,10 +17,38 @@ const map = window.L.map('map-canvas');
 // неактивное состояние - блокируем формы
 deactivateForms ();
 
+// создаём свою Главную метку
+const mainPinIcon = window.L.icon({
+  iconUrl: 'img/main-pin.svg',
+  iconSize: [100, 100],
+  iconAnchor: [50, 100],
+});
+// добавляем на карту метку
+const mainMarker = window.L.marker(
+  CENTER_TOKYO,
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+mainMarker.addTo(map);
+
 // активное состояние
 const setPageActive = function () {
+
   // активируем формы
   activateForms ();
+
+  // обращаемся к серверу и получаем объекты
+  getData (
+    (advertsFromServer) => {
+      // перебираем массив объектов полученных с сервера
+      for (let i = advertsFromServer.length - 1; i >= 0; i--) {
+        createMarkerOnMap(advertsFromServer[i]);
+      }
+    },
+    () => showAlert('Не удалось получить данные от сервера. Попробуйте ещё раз'),
+  );
 
   // добавляем на карту слой и копирайт
   window.L.tileLayer(
@@ -29,32 +58,12 @@ const setPageActive = function () {
     },
   ).addTo(map);
 
-  // создаём свою Главную метку
-  const mainPinIcon = window.L.icon({
-    iconUrl: 'img/main-pin.svg',
-    iconSize: [100, 100],
-    iconAnchor: [50, 100],
-  });
-  // добавляем на карту метку
-  const marker = window.L.marker(
-    CENTER_TOKYO,
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  );
-  marker.addTo(map);
-
   // задаём начальные координаты адреса центра Токио
-  setAddressField (marker.getLatLng().lat.toFixed(5), marker.getLatLng().lng.toFixed(5));
+  setAddressField (mainMarker.getLatLng().lat.toFixed(5), mainMarker.getLatLng().lng.toFixed(5));
   // выбор адреса путём перемещения главной метки и запись значений в поле адреса
-  marker.on('drag', function () {
-    setAddressField (marker.getLatLng().lat.toFixed(5), marker.getLatLng().lng.toFixed(5));
+  mainMarker.on('drag', function () {
+    setAddressField (mainMarker.getLatLng().lat.toFixed(5), mainMarker.getLatLng().lng.toFixed(5));
   });
-  // цикл перебора коллекции объявлений - добавляем на карту метки объявлений
-  for (let i = similarAdverts.length - 1; i >= 0; i--) {
-    createMarkerOnMap (similarAdverts[i]);
-  }
 }
 
 // функция создания метки по координатам
@@ -68,8 +77,8 @@ const createMarkerOnMap = function (point) {
   // добавляем на карту метку
   const marker = window.L.marker(
     {
-      lat: point.location.x,
-      lng: point.location.y,
+      lat: point.location.lat,
+      lng: point.location.lng,
     },
     {
       draggable: false,
@@ -91,4 +100,16 @@ map.on('load', () => {
   setPageActive();
 })
   .setView(
-    CENTER_TOKYO, 12);
+    CENTER_TOKYO, 10);
+
+// функция устанавливает Главную метку обратно в центр Токио
+const setMainPointToBegin = function () {
+  // перемещаем главную метку обратно в центр Токио
+  mainMarker.setLatLng(CENTER_TOKYO);
+  // задаём координаты главной метки в поле адоес формы
+  setAddressField (mainMarker.getLatLng().lat.toFixed(5), mainMarker.getLatLng().lng.toFixed(5));
+  // задаём карте центр и зум
+  map.setView(CENTER_TOKYO, 10);
+};
+
+export {createMarkerOnMap, setMainPointToBegin};

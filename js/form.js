@@ -1,12 +1,11 @@
-//import {getTypeOfRealEstate, getListItemsFeatures, getPhotos} from './popup.js';
-/*
-// задаём номер объявления для примера
-const NUMBER_OF_ADVERT = 1;
-const currentDataAdvert = similarAdverts[NUMBER_OF_ADVERT];
-*/
+import {sendData} from './api.js';
+import {setMainPointToBegin} from './map.js';
+import {showSuccessMessage, showErrorMessage} from './modal.js';
 
 // находим форму
 const advertForm = document.querySelector('.ad-form');
+// находим форму фильтров
+const filtersForm = document.querySelector('.map__filters');
 // находим селектор "Тип жилья"
 const fieldSelectType = advertForm.querySelector('#type');
 // находим инпут "Цена за ночь"
@@ -154,19 +153,14 @@ priceInput.addEventListener('input', () => {
 });
 
 
-// находим форму создания объявления
-const adForm = document.querySelector('.ad-form');
-// находим форму фильтра карты
-const mapFiltersForm = document.querySelector('.map__filters');
-
 const activateForms = function () {
-  unBlockForm (adForm, 'ad-form--disabled');
-  unBlockForm (mapFiltersForm, 'map__filters--disabled');
+  unBlockForm (advertForm, 'ad-form--disabled');
+  unBlockForm (filtersForm, 'map__filters--disabled');
 }
 
 const deactivateForms = function () {
-  blockForm (adForm, 'ad-form--disabled');
-  blockForm (mapFiltersForm, 'map__filters--disabled');
+  blockForm (advertForm, 'ad-form--disabled');
+  blockForm (filtersForm, 'map__filters--disabled');
 }
 
 // функция приводит форму  в неактивное состояние
@@ -201,4 +195,33 @@ const setAddressField = function (latitude, longitude) {
   fieldAddress.value = latitude + ', ' + longitude;
 }
 
-export {setAddressField, activateForms, deactivateForms};
+// обработчик отправки формы
+const addAdvertFormSubmit = (onSuccess) => {
+  advertForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => onSuccess(resetFormAndMainPoint()),
+      () => showErrorMessage(),
+      new FormData(evt.target),
+    );
+  });
+};
+
+addAdvertFormSubmit(showSuccessMessage);
+
+// обработчик кнопки Сброс
+const resetButton = document.querySelector('.ad-form__reset');
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetFormAndMainPoint();
+});
+
+// сброс обоих форм и установка поля адреса в центр
+const resetFormAndMainPoint = function () {
+  advertForm.reset();
+  filtersForm.reset();
+  setMainPointToBegin();
+}
+
+export {setAddressField, activateForms, deactivateForms, addAdvertFormSubmit, resetFormAndMainPoint};

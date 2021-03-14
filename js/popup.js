@@ -1,8 +1,3 @@
-// находим место вставки объявления
-//const placeForAdvert = document.querySelector('#map-canvas');
-// находим шаблон
-//const newItemTemplate = document.querySelector('#card').content.querySelector('.popup');
-
 // функция возвращает тип жилья по русски
 const getTypeOfRealEstate = function (typeOfRealEstate) {
   switch (typeOfRealEstate) {
