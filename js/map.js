@@ -2,6 +2,7 @@ import {createAdvertFromTemplate} from './popup.js';
 import {setAddressField, activateForms, deactivateForms} from './form.js';
 import {getData} from './api.js';
 import {showAlert} from './util.js';
+import {filterByHousingType} from './filters.js';
 
 // находим шаблон балуна
 const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
@@ -33,6 +34,32 @@ const mainMarker = window.L.marker(
 );
 mainMarker.addTo(map);
 
+
+const setTypeHousing = function(adverts) {
+  // находим селект тип жилья
+  const selectHousingType = document.querySelector('#housing-type');
+  //makePoins(adverts);
+  // прослушиваем событие изменения селекта
+  selectHousingType.addEventListener('change', function () {
+
+    //map.removeLayer(marker);
+    // находим какой пункт селекта выбран
+    let selectedType = selectHousingType.value;
+    if (selectedType === 'any') {
+      makePoins(adverts);
+    } else {
+      makePoins(filterByHousingType(selectedType, adverts));
+    }
+
+  });
+};
+
+const makePoins = function (adverts) {
+  //markersLayer.clearLayers();
+  for (let i = adverts.length - 1; i >= 0; i--) {
+    createMarkerOnMap(adverts[i]);
+  }
+}
 // активное состояние
 const setPageActive = function () {
 
@@ -42,10 +69,8 @@ const setPageActive = function () {
   // обращаемся к серверу и получаем объекты
   getData (
     (advertsFromServer) => {
-      // перебираем массив объектов полученных с сервера
-      for (let i = advertsFromServer.length - 1; i >= 0; i--) {
-        createMarkerOnMap(advertsFromServer[i]);
-      }
+      //makePoins(advertsFromServer);
+      setTypeHousing(advertsFromServer);
     },
     () => showAlert('Не удалось получить данные от сервера. Попробуйте ещё раз'),
   );

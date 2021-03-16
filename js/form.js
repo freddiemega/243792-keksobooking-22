@@ -196,19 +196,18 @@ const setAddressField = function (latitude, longitude) {
 }
 
 // обработчик отправки формы
-const addAdvertFormSubmit = (onSuccess) => {
-  advertForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
+advertForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
 
-    sendData(
-      () => onSuccess(resetFormAndMainPoint()),
-      () => showErrorMessage(),
-      new FormData(evt.target),
-    );
-  });
-};
-
-addAdvertFormSubmit(showSuccessMessage);
+  sendData(
+    () => {
+      showSuccessMessage();
+      resetFormAndMainPoint();
+    },
+    () => showErrorMessage(),
+    new FormData(evt.target),
+  );
+});
 
 // обработчик кнопки Сброс
 const resetButton = document.querySelector('.ad-form__reset');
@@ -224,4 +223,4 @@ const resetFormAndMainPoint = function () {
   setMainPointToBegin();
 }
 
-export {setAddressField, activateForms, deactivateForms, addAdvertFormSubmit, resetFormAndMainPoint};
+export {setAddressField, activateForms, deactivateForms, resetFormAndMainPoint};
