@@ -42,7 +42,8 @@ const setTypeHousing = function(adverts) {
   // прослушиваем событие изменения селекта
   selectHousingType.addEventListener('change', function () {
 
-    //map.removeLayer(marker);
+    //map.removeLayer(map._layers[60]);
+    //layerGroup.clearLayers();
     // находим какой пункт селекта выбран
     let selectedType = selectHousingType.value;
     if (selectedType === 'any') {
@@ -110,7 +111,8 @@ const createMarkerOnMap = function (point) {
       icon: pinIcon,
     },
   );
-  marker
+
+  let markersLayer = marker
     .addTo(map)
     .bindPopup(
       createAdvertFromTemplate (point, balloonTemplate),
@@ -118,7 +120,19 @@ const createMarkerOnMap = function (point) {
         keepInView: true,
       },
     );
+
+  let layerGroup = window.L.layerGroup(markersLayer)
+    .addLayer(markersLayer)
+    .addTo(map)
+
+  //var layerGroup = L.geoJson().addTo(map);
+  //layerGroup.clearLayers();
+  //console.log(layerGroup);
+
+
 };
+
+
 
 // инициализация карты
 map.on('load', () => {
