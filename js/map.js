@@ -2,11 +2,12 @@ import {createAdvertFromTemplate} from './popup.js';
 import {setAddressField, activateForms, deactivateForms} from './form.js';
 import {getData} from './api.js';
 import {showAlert} from './util.js';
-import {filterByHousingType} from './filters.js';
+import {setTypeHousing} from './filters.js';
 
 // находим шаблон балуна
 const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
-
+// задаём предельное количество объектов для вывода кна карту
+const SIMILAR_ADVERTS_COUNT = 10;
 // координаты центра Токио
 const CENTER_TOKYO = {
   lat: 35.68658,
@@ -35,28 +36,8 @@ const mainMarker = window.L.marker(
 mainMarker.addTo(map);
 
 
-const setTypeHousing = function(adverts) {
-  // находим селект тип жилья
-  const selectHousingType = document.querySelector('#housing-type');
-  //makePoins(adverts);
-  // прослушиваем событие изменения селекта
-  selectHousingType.addEventListener('change', function () {
-
-    //map.removeLayer(map._layers[60]);
-    //layerGroup.clearLayers();
-    // находим какой пункт селекта выбран
-    let selectedType = selectHousingType.value;
-    if (selectedType === 'any') {
-      makePoins(adverts);
-    } else {
-      makePoins(filterByHousingType(selectedType, adverts));
-    }
-
-  });
-};
 
 const makePoins = function (adverts) {
-  //markersLayer.clearLayers();
   for (let i = adverts.length - 1; i >= 0; i--) {
     createMarkerOnMap(adverts[i]);
   }
@@ -70,8 +51,8 @@ const setPageActive = function () {
   // обращаемся к серверу и получаем объекты
   getData (
     (advertsFromServer) => {
-      //makePoins(advertsFromServer);
-      setTypeHousing(advertsFromServer);
+      //олучаем объявления от сервера не более заданных
+      setTypeHousing(advertsFromServer.slice(0, SIMILAR_ADVERTS_COUNT));
     },
     () => showAlert('Не удалось получить данные от сервера. Попробуйте ещё раз'),
   );
@@ -92,6 +73,10 @@ const setPageActive = function () {
   });
 }
 
+// создаём группу слоёв и добавляем её на карту
+let markerGroup = null;
+markerGroup = window.L.layerGroup().addTo(map);
+
 // функция создания метки по координатам
 const createMarkerOnMap = function (point) {
   // создаём метку
@@ -111,27 +96,18 @@ const createMarkerOnMap = function (point) {
       icon: pinIcon,
     },
   );
-
-  let markersLayer = marker
-    .addTo(map)
+  // добавляем балун маркеру
+  marker
     .bindPopup(
       createAdvertFromTemplate (point, balloonTemplate),
       {
         keepInView: true,
       },
     );
-
-  let layerGroup = window.L.layerGroup(markersLayer)
-    .addLayer(markersLayer)
-    .addTo(map)
-
-  //var layerGroup = L.geoJson().addTo(map);
-  //layerGroup.clearLayers();
-  //console.log(layerGroup);
-
+  // добавляем слой с маркером в группу
+  markerGroup.addLayer(marker);
 
 };
-
 
 
 // инициализация карты
@@ -139,7 +115,7 @@ map.on('load', () => {
   setPageActive();
 })
   .setView(
-    CENTER_TOKYO, 10);
+    CENTER_TOKYO, 9);
 
 // функция устанавливает Главную метку обратно в центр Токио
 const setMainPointToBegin = function () {
@@ -151,4 +127,4 @@ const setMainPointToBegin = function () {
   map.setView(CENTER_TOKYO, 10);
 };
 
-export {createMarkerOnMap, setMainPointToBegin};
+export {createMarkerOnMap, setMainPointToBegin, makePoins, markerGroup};
