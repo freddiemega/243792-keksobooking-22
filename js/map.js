@@ -2,12 +2,12 @@ import {createAdvertFromTemplate} from './popup.js';
 import {setAddressField, activateForms, deactivateForms} from './form.js';
 import {getData} from './api.js';
 import {showAlert} from './util.js';
-import {setTypeHousing} from './filters.js';
+import {setHousing} from './filters.js';
 
 // находим шаблон балуна
 const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
 // задаём предельное количество объектов для вывода кна карту
-const SIMILAR_ADVERTS_COUNT = 10;
+//const SIMILAR_ADVERTS_COUNT = 10;
 // координаты центра Токио
 const CENTER_TOKYO = {
   lat: 35.68658,
@@ -38,6 +38,10 @@ mainMarker.addTo(map);
 
 
 const makePoins = function (adverts) {
+  // очищаем группу слоёв
+  if (markerGroup) {
+    markerGroup.clearLayers();
+  }
   for (let i = adverts.length - 1; i >= 0; i--) {
     createMarkerOnMap(adverts[i]);
   }
@@ -51,8 +55,9 @@ const setPageActive = function () {
   // обращаемся к серверу и получаем объекты
   getData (
     (advertsFromServer) => {
-      //олучаем объявления от сервера не более заданных
-      setTypeHousing(advertsFromServer.slice(0, SIMILAR_ADVERTS_COUNT));
+      //получаем объявления от сервера не более заданных
+      //setTypeHousing(advertsFromServer.slice(0, SIMILAR_ADVERTS_COUNT));
+      setHousing(advertsFromServer);
     },
     () => showAlert('Не удалось получить данные от сервера. Попробуйте ещё раз'),
   );
@@ -127,4 +132,4 @@ const setMainPointToBegin = function () {
   map.setView(CENTER_TOKYO, 10);
 };
 
-export {createMarkerOnMap, setMainPointToBegin, makePoins, markerGroup};
+export {createMarkerOnMap, setMainPointToBegin, makePoins};

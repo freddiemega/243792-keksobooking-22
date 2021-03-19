@@ -1,75 +1,4 @@
-import {makePoins, markerGroup} from './map.js';
-
-// функция принимает тип жилья, возвращает массив отфильтрованных объектов согласно этого типа
-const filterByHousingType = function (housingType = 'any', arrayObjects) {
-  const filteredArrayObjects = arrayObjects.filter(function(element) {
-    if (housingType !== 'any') {
-      return element.offer.type === housingType;
-    } else {
-      return element;
-    }
-
-  });
-  return filteredArrayObjects;
-}
-
-const filterByHousingPrice = function (housingPrice = 'any', arrayObjects) {
-  const filteredArrayObjects = arrayObjects.filter(function(element) {
-    let priceFromObject = element.offer.price;
-    if (housingPrice === 'middle') {
-      return (priceFromObject > 10000 && priceFromObject < 50000);
-    } else if (housingPrice === 'low') {
-      return priceFromObject < 10000;
-    } else if (housingPrice === 'high') {
-      return priceFromObject > 50000;
-    } else {
-      return element;
-    }
-  });
-  return filteredArrayObjects;
-}
-
-const filterByHousingRooms = function (housingRooms = 'any', arrayObjects) {
-  const filteredArrayObjects = arrayObjects.filter(function(element) {
-    let roomsFromObject = element.offer.rooms;
-    switch (housingRooms) {
-      case 1:
-        return roomsFromObject === 1;
-      case 2:
-        return roomsFromObject === 2;
-      case 3:
-        return roomsFromObject === 3;
-      default:
-        return element;
-    }
-  });
-  return filteredArrayObjects;
-}
-
-const filterByHousingGuests = function (housingGuests = 'any', arrayObjects) {
-  const filteredArrayObjects = arrayObjects.filter(function(element) {
-    let guestsFromObject = element.offer.guests;
-    switch (housingGuests) {
-      case 1:
-        return guestsFromObject === 1;
-      case 2:
-        return guestsFromObject === 2;
-      case 0:
-        return guestsFromObject === 0;
-      default:
-        return element;
-    }
-  });
-  return filteredArrayObjects;
-}
-
-const filterByHousingFeatures = function (housingFeatures, arrayObjects) {
-  const filteredArrayObjects = arrayObjects.filter(function(element) {
-    // ищем наличие элемента в массиве
-    return element.offer.features.includes(housingFeatures);
-  });
-  return filteredArrayObjects;
-}
+import {makePoins} from './map.js';
 
 // находим форму фильтров
 const filtersForm = document.querySelector('.map__filters');
@@ -89,45 +18,115 @@ const inputFilterWasher = filtersForm.querySelector('#filter-washer');
 const inputFilterElevator = filtersForm.querySelector('#filter-elevator');
 const inputFilterConditioner = filtersForm.querySelector('#filter-conditioner');
 
-const setTypeHousing = function(adverts) {
+// функция фильтрации объявлений
+const setHousing = function (adverts) {
 
   makePoins(adverts);
   // прослушиваем событие изменения селекта
   filtersForm.addEventListener('change', function () {
-    // очищаем группу слоёв
-    if (markerGroup) {
-      markerGroup.clearLayers();
-    }
 
-    let advertsAfterFilters = filterByHousingType(selectHousingType.value, adverts);
+    const housingType = selectHousingType.value;
+    const housingPrice = selectHousingPrice.value;
+    const housingRooms = selectHousingRooms.value;
+    const housingGuests = selectHousingGuests.value;
+    const wifi = inputFilterWifi.checked;
+    const dishwasher = inputFilterDishwasher.checked;
+    const parking = inputFilterParking.checked;
+    const washer = inputFilterWasher.checked;
+    const elevator = inputFilterElevator.checked;
+    const conditioner = inputFilterConditioner.checked;
 
-    advertsAfterFilters = filterByHousingPrice(selectHousingPrice.value, advertsAfterFilters);
+    let filters = [
+      o => {
+        if (housingType !== 'any') {
+          return o.offer.type === housingType;
+        } else {
+          return true;
+        }
+      },
+      o => {
+        switch (housingPrice) {
+          case 'middle':
+            return (o.offer.price >= 10000 && o.offer.price < 50000);
+          case 'low':
+            return o.offer.price < 10000;
+          case 'high':
+            return o.offer.price > 50000;
+          default:
+            return true;
+        }
+      },
+      o => {
+        switch (Number(housingRooms)) {
+          case 1:
+            return o.offer.rooms === 1;
+          case 2:
+            return o.offer.rooms === 2;
+          case 3:
+            return o.offer.rooms === 3;
+          default:
+            return true;
+        }
+      },
+      o => {
+        switch (Number(housingGuests)) {
+          case 1:
+            return o.offer.guests === 1;
+          case 2:
+            return o.offer.guests === 2;
+          case 0:
+            return o.offer.guests === 0;
+          default:
+            return true;
+        }
+      },
+      o => {
+        if (wifi) {
+          return o.offer.features.includes('wifi');
+        } else {
+          return true;
+        }
+      },
+      o => {
+        if (dishwasher) {
+          return o.offer.features.includes('dishwasher');
+        } else {
+          return true;
+        }
+      },
+      o => {
+        if (parking) {
+          return o.offer.features.includes('parking');
+        } else {
+          return true;
+        }
+      },
+      o => {
+        if (washer) {
+          return o.offer.features.includes('washer');
+        } else {
+          return true;
+        }
+      },
+      o => {
+        if (elevator) {
+          return o.offer.features.includes('elevator');
+        } else {
+          return true;
+        }
+      },
+      o => {
+        if (conditioner) {
+          return o.offer.features.includes('conditioner');
+        } else {
+          return true;
+        }
+      },
+    ];
+    let result = adverts.filter(o => filters.every(fn => fn(o)));
 
-    advertsAfterFilters = filterByHousingRooms(Number(selectHousingRooms.value), advertsAfterFilters);
-
-    advertsAfterFilters = filterByHousingGuests(Number(selectHousingGuests.value), advertsAfterFilters);
-
-    if (inputFilterWifi.checked) {
-      advertsAfterFilters = filterByHousingFeatures('wifi', advertsAfterFilters);
-    }
-    if (inputFilterDishwasher.checked) {
-      advertsAfterFilters = filterByHousingFeatures('dishwasher', advertsAfterFilters);
-    }
-    if (inputFilterParking.checked) {
-      advertsAfterFilters = filterByHousingFeatures('parking', advertsAfterFilters);
-    }
-    if (inputFilterWasher.checked) {
-      advertsAfterFilters = filterByHousingFeatures('washer', advertsAfterFilters);
-    }
-    if (inputFilterElevator.checked) {
-      advertsAfterFilters = filterByHousingFeatures('elevator', advertsAfterFilters);
-    }
-    if (inputFilterConditioner.checked) {
-      advertsAfterFilters = filterByHousingFeatures('conditioner', advertsAfterFilters);
-    }
-
-    makePoins(advertsAfterFilters);
+    makePoins(result);
   });
 };
 
-export {setTypeHousing};
+export {setHousing};
