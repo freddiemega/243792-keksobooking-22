@@ -2,10 +2,11 @@ import {createAdvertFromTemplate} from './popup.js';
 import {setAddressField, activateForms, deactivateForms} from './form.js';
 import {getData} from './api.js';
 import {showAlert} from './util.js';
+import {setHousing} from './filters.js';
 
+const MAP_ZOOM = 9;
 // находим шаблон балуна
 const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
-
 // координаты центра Токио
 const CENTER_TOKYO = {
   lat: 35.68658,
@@ -33,6 +34,17 @@ const mainMarker = window.L.marker(
 );
 mainMarker.addTo(map);
 
+
+
+const makePoins = function (adverts) {
+  // очищаем группу слоёв
+  if (markerGroup) {
+    markerGroup.clearLayers();
+  }
+  for (let i = adverts.length - 1; i >= 0; i--) {
+    createMarkerOnMap(adverts[i]);
+  }
+}
 // активное состояние
 const setPageActive = function () {
 
@@ -42,10 +54,8 @@ const setPageActive = function () {
   // обращаемся к серверу и получаем объекты
   getData (
     (advertsFromServer) => {
-      // перебираем массив объектов полученных с сервера
-      for (let i = advertsFromServer.length - 1; i >= 0; i--) {
-        createMarkerOnMap(advertsFromServer[i]);
-      }
+      //получаем объявления от сервера
+      setHousing(advertsFromServer);
     },
     () => showAlert('Не удалось получить данные от сервера. Попробуйте ещё раз'),
   );
@@ -66,6 +76,10 @@ const setPageActive = function () {
   });
 }
 
+// создаём группу слоёв и добавляем её на карту
+let markerGroup = null;
+markerGroup = window.L.layerGroup().addTo(map);
+
 // функция создания метки по координатам
 const createMarkerOnMap = function (point) {
   // создаём метку
@@ -85,14 +99,17 @@ const createMarkerOnMap = function (point) {
       icon: pinIcon,
     },
   );
+  // добавляем балун маркеру
   marker
-    .addTo(map)
     .bindPopup(
       createAdvertFromTemplate (point, balloonTemplate),
       {
         keepInView: true,
       },
     );
+  // добавляем слой с маркером в группу
+  markerGroup.addLayer(marker);
+
 };
 
 // инициализация карты
@@ -100,7 +117,7 @@ map.on('load', () => {
   setPageActive();
 })
   .setView(
-    CENTER_TOKYO, 10);
+    CENTER_TOKYO, MAP_ZOOM);
 
 // функция устанавливает Главную метку обратно в центр Токио
 const setMainPointToBegin = function () {
@@ -109,7 +126,19 @@ const setMainPointToBegin = function () {
   // задаём координаты главной метки в поле адоес формы
   setAddressField (mainMarker.getLatLng().lat.toFixed(5), mainMarker.getLatLng().lng.toFixed(5));
   // задаём карте центр и зум
-  map.setView(CENTER_TOKYO, 10);
+  map.setView(CENTER_TOKYO, MAP_ZOOM);
 };
 
-export {createMarkerOnMap, setMainPointToBegin};
+// функция сброса карты - отрисовка всех объектов
+const resetMap = function () {
+  // обращаемся к серверу и получаем объекты
+  getData (
+    (advertsFromServer) => {
+      //получаем объявления от сервера
+      setHousing(advertsFromServer);
+    },
+    () => showAlert('Не удалось получить данные от сервера. Попробуйте ещё раз'),
+  );
+}
+
+export {createMarkerOnMap, setMainPointToBegin, makePoins, resetMap};

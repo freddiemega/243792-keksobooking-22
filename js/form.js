@@ -1,5 +1,5 @@
 import {sendData} from './api.js';
-import {setMainPointToBegin} from './map.js';
+import {setMainPointToBegin, resetMap} from './map.js';
 import {showSuccessMessage, showErrorMessage} from './modal.js';
 
 // находим форму
@@ -196,19 +196,18 @@ const setAddressField = function (latitude, longitude) {
 }
 
 // обработчик отправки формы
-const addAdvertFormSubmit = (onSuccess) => {
-  advertForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
+advertForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
 
-    sendData(
-      () => onSuccess(resetFormAndMainPoint()),
-      () => showErrorMessage(),
-      new FormData(evt.target),
-    );
-  });
-};
-
-addAdvertFormSubmit(showSuccessMessage);
+  sendData(
+    () => {
+      showSuccessMessage();
+      resetFormAndMainPoint();
+    },
+    () => showErrorMessage(),
+    new FormData(evt.target),
+  );
+});
 
 // обработчик кнопки Сброс
 const resetButton = document.querySelector('.ad-form__reset');
@@ -222,6 +221,7 @@ const resetFormAndMainPoint = function () {
   advertForm.reset();
   filtersForm.reset();
   setMainPointToBegin();
+  resetMap();
 }
 
-export {setAddressField, activateForms, deactivateForms, addAdvertFormSubmit, resetFormAndMainPoint};
+export {setAddressField, activateForms, deactivateForms, resetFormAndMainPoint};
