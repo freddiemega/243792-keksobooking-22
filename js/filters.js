@@ -1,9 +1,10 @@
-import {makePoins} from './map.js';
+/* global _:readonly */
+import {updatePoints} from './map.js';
 
 // задаём количество фильтруемых объявлений
 const NUMBER_DISPLAYED_ADS = 10;
 // задаём задержку для перерисовки маркеров
-//const RERENDER_DELAY = 500;
+const RERENDER_DELAY = 500;
 
 // находим форму фильтров
 const filtersForm = document.querySelector('.map__filters');
@@ -18,22 +19,17 @@ const selectHousingGuests = filtersForm.querySelector('#housing-guests');
 // находим все инпуты features
 const featuresAll = filtersForm.querySelectorAll('input[type="checkbox"]');
 
-let housingType = selectHousingType.value;
-let housingPrice = selectHousingPrice.value;
-let housingRooms = selectHousingRooms.value;
-let housingGuests = selectHousingGuests.value;
-
 // функция проверки объекта по типу жилья
 const checkByType = function(element) {
-  if (housingType !== 'any') {
-    return element.offer.type === housingType;
+  if (selectHousingType.value !== 'any') {
+    return element.offer.type === selectHousingType.value;
   } else {
     return true;
   }
 };
 // функция проверки объекта по цене
 const checkByPrice = function(element) {
-  switch (housingPrice) {
+  switch (selectHousingPrice.value) {
     case 'middle':
       return (element.offer.price >= 10000 && element.offer.price < 50000);
     case 'low':
@@ -46,7 +42,7 @@ const checkByPrice = function(element) {
 };
 // функция проверки объекта по количеству комнат
 const checkByRooms = function (element) {
-  switch (Number(housingRooms)) {
+  switch (Number(selectHousingRooms.value)) {
     case 1:
       return element.offer.rooms === 1;
     case 2:
@@ -59,7 +55,7 @@ const checkByRooms = function (element) {
 }
 // функция проверки объекта по количеству гостей
 const checkByGuests = function (element) {
-  switch (Number(housingGuests)) {
+  switch (Number(selectHousingGuests.value)) {
     case 1:
       return element.offer.guests === 1;
     case 2:
@@ -82,7 +78,7 @@ const checkByFeatures = function (element, featuresAll) {
   return flag;
 }
 // функция применяет фильтры к массиву объявлений, возвращает отфильтрованный массив
-const applyАFilters = (adverts) => {
+const applyFilters = (adverts) => {
   const filteredItems= [];
   for(let i = 0; i < adverts.length; i++) {
     const item = adverts[i];
@@ -99,46 +95,12 @@ const applyАFilters = (adverts) => {
   }
   return filteredItems;
 }
+// функция защиты от дребезга при использовании формы фильтров
+const debounceUpdatePoints = _.debounce(() => updatePoints(), RERENDER_DELAY);
+// прослушиваем событие изменения формы
+filtersForm.addEventListener('change', function () {
+  // применяем функцию перерисовки маркеров
+  debounceUpdatePoints();
+});
 
-//const debounceMakePoins = _.debounce(() => makePoins(applyАFilters(adverts), RERENDER_DELAY));
-
-const setHousing = function (adverts) {
-  // выводим все объявления на карту
-  makePoins(adverts);
-
-  // прослушиваем событие изменения всей формы
-  filtersForm.addEventListener('change', function () {
-
-    housingType = selectHousingType.value;
-    housingPrice = selectHousingPrice.value;
-    housingRooms = selectHousingRooms.value;
-    housingGuests = selectHousingGuests.value;
-
-    makePoins(applyАFilters(adverts));
-    //console.log(applyАFilters(adverts));
-    //return adverts.slice(1, 5);
-    //return applyАFilters(adverts);
-  });
-  //return adverts;
-}
-
-/*
-const filter = function (arr) {
-  //return arr.slice(1, 7);
-  //let arrSliced = arr.slice(1, 5);
-  //let arrSliced = arr;
-  //console.log(arr);
-
-  const filterInside = function () {
-    //console.log(arrSliced);
-    let arrFiltered = arr.slice(1, 5);
-    //console.log(arrFiltered);
-    return arrFiltered;
-
-  }
-  return filterInside();
-
-}
-*/
-
-export {setHousing};
+export {applyFilters};
