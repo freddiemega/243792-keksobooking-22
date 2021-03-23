@@ -54,7 +54,17 @@ const setPageActive = function () {
   // обращаемся к серверу и получаем объекты
   getData (
     (advertsFromServer) => {
+      //const filtered = filter(advertsFromServer);
+      //console.log(filter(advertsFromServer));
+
+      //const filtered = filter(advertsFromServer);
+      //const filtered = setHousing(advertsFromServer);
+      //console.log(filtered);
+      //makePoins(filtered);
+      //setHousing(filtered);
       //получаем объявления от сервера
+
+
       setHousing(advertsFromServer);
     },
     () => showAlert('Не удалось получить данные от сервера. Попробуйте ещё раз'),
