@@ -3,6 +3,30 @@ import {setMainPointToBegin, resetMap} from './map.js';
 import {showSuccessMessage, showErrorMessage} from './modal.js';
 import {resetPreviews} from './previews.js';
 
+// константы для ограничения поля title
+const MIN_NAME_LENGTH = 30;
+const MAX_NAME_LENGTH = 100;
+// константа ограничения максимальной цены
+const MAX_PPRICE_VALUE = 1000000;
+// объект для селекта "Количество мест"
+const roomsOptionsData = [
+  {
+    values: [1],
+    guests: ['для 1 гостя'],
+  },
+  {
+    values: [2, 1],
+    guests: ['для 2 гостей', 'для 1 гостя'],
+  },
+  {
+    values: [3, 2, 1],
+    guests: ['для 3 гостей', 'для 2 гостей', 'для 1 гостя'],
+  },
+  {
+    values: [0],
+    guests: ['не для гостей'],
+  },
+];
 // находим форму
 const advertForm = document.querySelector('.ad-form');
 // находим форму фильтров
@@ -59,26 +83,7 @@ fieldTimeOut.addEventListener('change', function () {
   fieldTimeIn.value = fieldTimeOut.value;
 });
 
-//------------«Количество комнат» синхронизировано с полем «Количество мест»
-// объект для селекта "Количество мест"
-const roomsOptionsData = [
-  {
-    values: [1],
-    guests: ['для 1 гостя'],
-  },
-  {
-    values: [2, 1],
-    guests: ['для 2 гостей', 'для 1 гостя'],
-  },
-  {
-    values: [3, 2, 1],
-    guests: ['для 3 гостей', 'для 2 гостей', 'для 1 гостя'],
-  },
-  {
-    values: [0],
-    guests: ['не для гостей'],
-  },
-];
+// «Количество комнат» синхронизировано с полем «Количество мест»
 // находим селект "Количество комнат"
 const selectRooms = advertForm.querySelector('#room_number');
 // находим селект "Количество мест"
@@ -117,9 +122,6 @@ selectRooms.addEventListener('change', function () {
 
 
 // валидация текстового поля title
-const MIN_NAME_LENGTH = 30;
-const MAX_NAME_LENGTH = 100;
-
 const titleInput = document.querySelector('#title');
 
 titleInput.addEventListener('input', () => {
@@ -138,7 +140,6 @@ titleInput.addEventListener('input', () => {
 
 
 // валидация текстового поля price
-const MAX_PPRICE_VALUE = 1000000;
 const priceInput = document.querySelector('#price');
 
 priceInput.addEventListener('input', () => {

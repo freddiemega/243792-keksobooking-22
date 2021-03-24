@@ -4,14 +4,16 @@ import {getData} from './api.js';
 import {showAlert} from './util.js';
 import {applyFilters} from './filters.js';
 
+// константа - уровень зума карты
 const MAP_ZOOM = 9;
-// находим шаблон балуна
-const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
 // координаты центра Токио
 const CENTER_TOKYO = {
   lat: 35.68658,
   lng: 139.76463,
 };
+// находим шаблон балуна
+const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
+
 // создаём карту
 const map = window.L.map('map-canvas');
 

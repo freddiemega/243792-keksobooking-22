@@ -1,3 +1,6 @@
+// время показа сообщения
+const ALERT_SHOW_TIME = 5000;
+
 // функция случайное целое число из диапазона
 const getRandom = function (minNumber, maxNumber) {
   const min = Math.min (minNumber, maxNumber);
@@ -29,8 +32,6 @@ const getMultipleValuesArray = function (sourceArray) {
   return tempArray;
 }
 
-// время показа сообщения
-const ALERT_SHOW_TIME = 5000;
 // функция выводит сообщение вверху окна браузера
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
