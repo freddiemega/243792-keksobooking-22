@@ -2,7 +2,7 @@ import {createAdvertFromTemplate} from './popup.js';
 import {setAddressField, activateForms, deactivateForms} from './form.js';
 import {getData} from './api.js';
 import {showAlert} from './util.js';
-import {setHousing} from './filters.js';
+import {applyFilters} from './filters.js';
 
 const MAP_ZOOM = 9;
 // находим шаблон балуна
@@ -35,15 +35,23 @@ const mainMarker = window.L.marker(
 mainMarker.addTo(map);
 
 
-
 const makePoins = function (adverts) {
+  for (let i = adverts.length - 1; i >= 0; i--) {
+    createMarkerOnMap(adverts[i]);
+  }
+}
+
+let data = [];
+// функция обновляет маркеры на карте
+const updatePoints = function () {
   // очищаем группу слоёв
   if (markerGroup) {
     markerGroup.clearLayers();
   }
-  for (let i = adverts.length - 1; i >= 0; i--) {
-    createMarkerOnMap(adverts[i]);
-  }
+  // фильтруем данные полученные от сервера
+  const filteredData = applyFilters(data);
+  // строим маркеры на карте из отфильтрованных данных
+  makePoins(filteredData);
 }
 // активное состояние
 const setPageActive = function () {
@@ -54,8 +62,8 @@ const setPageActive = function () {
   // обращаемся к серверу и получаем объекты
   getData (
     (advertsFromServer) => {
-      //получаем объявления от сервера
-      setHousing(advertsFromServer);
+      data = advertsFromServer;
+      updatePoints();
     },
     () => showAlert('Не удалось получить данные от сервера. Попробуйте ещё раз'),
   );
@@ -134,11 +142,10 @@ const resetMap = function () {
   // обращаемся к серверу и получаем объекты
   getData (
     (advertsFromServer) => {
-      //получаем объявления от сервера
-      setHousing(advertsFromServer);
+      updatePoints(advertsFromServer);
     },
     () => showAlert('Не удалось получить данные от сервера. Попробуйте ещё раз'),
   );
 }
 
-export {createMarkerOnMap, setMainPointToBegin, makePoins, resetMap};
+export {createMarkerOnMap, setMainPointToBegin, makePoins, resetMap, updatePoints};
