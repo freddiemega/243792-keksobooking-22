@@ -1,6 +1,7 @@
 import {sendData} from './api.js';
 import {setMainPointToBegin, resetMap} from './map.js';
 import {showSuccessMessage, showErrorMessage} from './modal.js';
+import {resetPreviews} from './previews.js';
 
 // находим форму
 const advertForm = document.querySelector('.ad-form');
@@ -222,6 +223,7 @@ const resetFormAndMainPoint = function () {
   filtersForm.reset();
   setMainPointToBegin();
   resetMap();
+  resetPreviews();
 }
 
 export {setAddressField, activateForms, deactivateForms, resetFormAndMainPoint};
