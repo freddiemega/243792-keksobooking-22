@@ -221,6 +221,8 @@ resetButton.addEventListener('click', (evt) => {
 // сброс обоих форм и установка поля адреса в центр
 const resetFormAndMainPoint = function () {
   advertForm.reset();
+  setCapacityForGuests(1);
+  setPriceForNight('flat');
   filtersForm.reset();
   setMainPointToBegin();
   resetMap();

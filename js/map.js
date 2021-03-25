@@ -14,11 +14,11 @@ const CENTER_TOKYO = {
 // находим шаблон балуна
 const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-// создаём карту
-const map = window.L.map('map-canvas');
-
 // неактивное состояние - блокируем формы
 deactivateForms ();
+
+// создаём карту
+const map = window.L.map('map-canvas');
 
 // создаём свою Главную метку
 const mainPinIcon = window.L.icon({
