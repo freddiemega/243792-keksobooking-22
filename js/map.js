@@ -7,7 +7,7 @@ import {applyFilters} from './filters.js';
 // константа - уровень зума карты
 const MAP_ZOOM = 9;
 // координаты центра Токио
-const CENTER_TOKYO = {
+const CenterTokyo = {
   lat: 35.68658,
   lng: 139.76463,
 };
@@ -28,14 +28,13 @@ const mainPinIcon = window.L.icon({
 });
 // добавляем на карту метку
 const mainMarker = window.L.marker(
-  CENTER_TOKYO,
+  CenterTokyo,
   {
     draggable: true,
     icon: mainPinIcon,
   },
 );
 mainMarker.addTo(map);
-
 
 const makePoins = function (adverts) {
   for (let i = adverts.length - 1; i >= 0; i--) {
@@ -57,9 +56,6 @@ const updatePoints = function () {
 }
 // активное состояние
 const setPageActive = function () {
-
-  // активируем формы
-  activateForms ();
 
   // обращаемся к серверу и получаем объекты
   getData (
@@ -127,16 +123,18 @@ map.on('load', () => {
   setPageActive();
 })
   .setView(
-    CENTER_TOKYO, MAP_ZOOM);
+    CenterTokyo, MAP_ZOOM);
+// активируем формы
+activateForms ();
 
 // функция устанавливает Главную метку обратно в центр Токио
 const setMainPointToBegin = function () {
   // перемещаем главную метку обратно в центр Токио
-  mainMarker.setLatLng(CENTER_TOKYO);
+  mainMarker.setLatLng(CenterTokyo);
   // задаём координаты главной метки в поле адоес формы
   setAddressField (mainMarker.getLatLng().lat.toFixed(5), mainMarker.getLatLng().lng.toFixed(5));
   // задаём карте центр и зум
-  map.setView(CENTER_TOKYO, MAP_ZOOM);
+  map.setView(CenterTokyo, MAP_ZOOM);
 };
 
 // функция сброса карты - отрисовка всех объектов

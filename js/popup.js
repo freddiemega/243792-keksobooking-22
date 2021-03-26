@@ -47,7 +47,6 @@ const getPhotos = function (arrayPhotos) {
   // возвращаем слитый построчно HTML
   return arrayPhotosHTML.join('\n');
 }
-
 // функция возвращает объявление, принимает объект с данными и шаблон, возвращает HTML объявления
 const createAdvertFromTemplate = function (valueDataAdvert, popupTemplate) {
   // клонируем объявление
@@ -63,11 +62,20 @@ const createAdvertFromTemplate = function (valueDataAdvert, popupTemplate) {
   // тип жилья
   advert.querySelector('.popup__type').textContent = getTypeOfRealEstate(valueDataAdvert.offer.type);
   // количество гостей и комнат
-  advert.querySelector('.popup__text--capacity').textContent = valueDataAdvert.offer.rooms + ' комнаты для ' + valueDataAdvert.offer.guests + ' гостей';
+  if (valueDataAdvert.offer.rooms === 0 || valueDataAdvert.offer.guests === 0) {
+    advert.querySelector('.popup__text--capacity').remove();
+  } else {
+    advert.querySelector('.popup__text--capacity').textContent = valueDataAdvert.offer.rooms + ' комнаты для ' + valueDataAdvert.offer.guests + ' гостей';
+  }
   // заезд отъезд
   advert.querySelector('.popup__text--time').textContent = 'Заезд после ' + valueDataAdvert.offer.checkin + ', выезд до ' + valueDataAdvert.offer.checkout;
   // все доступные удобства в объявлении
-  advert.querySelector('.popup__features').innerHTML = getListItemsFeatures (valueDataAdvert.offer.features);
+  if (valueDataAdvert.offer.features.length === 0) {
+    // убираем весь список если пришёл пустой массив удобств
+    advert.querySelector('.popup__features').remove();
+  } else {
+    advert.querySelector('.popup__features').innerHTML = getListItemsFeatures (valueDataAdvert.offer.features);
+  }
   // описание объекта недвижимости
   advert.querySelector('.popup__description').textContent = valueDataAdvert.offer.description;
   // все фотографии из списка
