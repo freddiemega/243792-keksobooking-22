@@ -91,7 +91,7 @@ const selectCapacity = advertForm.querySelector('#capacity');
 // функция создаёт теги <option> в <select id="capacity" name="capacity">
 // в зависимости от "количества комнат", данные из массива объектов roomsOptionsData
 const setCapacityForGuests = function (rooms) {
-  if (rooms == 100) {
+  if (rooms === 100) {
     rooms = 4;
   }
   // удаляем все дочерние элементы селекта
@@ -101,7 +101,7 @@ const setCapacityForGuests = function (rooms) {
     let optionItem = document.createElement('option');
     optionItem.setAttribute ('value', roomsOptionsData[rooms-1].values[i]);
     // устанавливаем атрибут selected для первого option
-    if (i == 0) {
+    if (i === 0) {
       optionItem.setAttribute('selected', 'selected');
     }
     optionItem.textContent  = roomsOptionsData[rooms-1].guests[i];
